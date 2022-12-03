@@ -500,7 +500,7 @@ pub fn handle_command_test(
     bot: &Bot,
     _app_env: Arc<Env>,
 ) -> Result<JsonRequest<SendMessage>, Error> {
-    let signal = "KavehShahbazian";
+    let signal = "KavehShahbazian Sat Dec  3 23:36:05 CET 2022";
     Ok(bot.send_message(msg.chat.id, signal))
 }
 
