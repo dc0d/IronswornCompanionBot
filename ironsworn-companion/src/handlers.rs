@@ -500,7 +500,7 @@ pub fn handle_command_test(
     bot: &Bot,
     _app_env: Arc<Env>,
 ) -> Result<JsonRequest<SendMessage>, Error> {
-    let github_sha = option_env!("APP_GIT_HASH").unwrap_or("unknown APP_GIT_HASH");
+    let github_sha = std::env::var("APP_GIT_HASH").unwrap_or("unknown APP_GIT_HASH".to_string());
     let signal = format!("KavehShahbazian {}", github_sha);
     Ok(bot.send_message(msg.chat.id, signal))
 }
