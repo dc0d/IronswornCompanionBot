@@ -81,54 +81,68 @@ fn command_dispatcher(
         teloxide::utils::command::parse_command(msg.text().unwrap_or_default(), BOT_NAME).unwrap();
     log::info!("received command {} {:?}", cmd_text.to_string(), args);
 
-    match cmd_text {
-        "start" => handle_command_start(msg, bot, app_env),
-        "help" => handle_command_help(msg, bot, app_env),
-
-        "roll" => handle_command_roll(msg, bot, app_env),
-        "roll_100" => handle_command_roll_100(msg, bot, app_env),
-
-        "roll_action" => handle_command_roll_action(msg, bot, app_env),
-        "roll_theme" => handle_command_roll_theme(msg, bot, app_env),
-        "roll_action_and_theme" => handle_command_roll_action_and_theme(msg, bot, app_env),
-
-        "roll_ask_the_oracle" => handle_command_roll_ask_the_oracle(msg, bot, app_env),
-
-        "roll_region" => handle_command_roll_region(msg, bot, app_env),
-        "roll_location" => handle_command_roll_location(msg, bot, app_env),
-        "roll_coastal_waters_location" => {
-            handle_command_roll_coastal_waters_location(msg, bot, app_env)
-        }
-        "roll_location_descriptors" => handle_command_roll_location_descriptors(msg, bot, app_env),
-
-        "roll_settlement_name" => handle_command_roll_settlement_name(msg, bot, app_env),
-        "roll_quick_settlement_name" => {
-            handle_command_roll_quick_settlement_name(msg, bot, app_env)
-        }
-        "roll_settlement_trouble" => handle_command_roll_settlement_trouble(msg, bot, app_env),
-
-        "roll_character" => handle_command_roll_character(msg, bot, app_env),
-        "roll_character_role" => handle_command_roll_character_role(msg, bot, app_env),
-        "roll_character_goal" => handle_command_roll_character_goal(msg, bot, app_env),
-        "roll_character_descriptor" => handle_command_roll_character_descriptor(msg, bot, app_env),
-
-        "roll_ironlander_names" => handle_command_roll_ironlander_names(msg, bot, app_env),
-        "roll_elf_names" => handle_command_roll_elf_names(msg, bot, app_env),
-        "roll_giant_names" => handle_command_roll_giant_names(msg, bot, app_env),
-        "roll_varou_names" => handle_command_roll_varou_names(msg, bot, app_env),
-        "roll_troll_names" => handle_command_roll_troll_names(msg, bot, app_env),
-
-        "roll_challenge_rank" => handle_command_roll_challenge_rank(msg, bot, app_env),
-        "roll_combat_action" => handle_command_roll_combat_action(msg, bot, app_env),
-        "roll_major_plot_twist" => handle_command_roll_major_plot_twist(msg, bot, app_env),
-        "roll_mystic_backlash" => handle_command_roll_mystic_backlash(msg, bot, app_env),
-
-        "test" => handle_command_test(msg, bot, app_env),
+    match command_handler_factory(cmd_text) {
+        Some(iron_handler) => iron_handler.handle(msg, bot, app_env),
 
         _ => Err(Error::Text(format!(
             "NO COMMAND HANDLER FOUND FOR MESSAGE: {}",
             msg.text().unwrap_or_default()
         ))),
+    }
+}
+
+fn command_handler_factory(cmd_text: &str) -> Option<&dyn IronHandler> {
+    match cmd_text {
+        "start" => Some(&(handle_command_start as IronHandlerFn)),
+
+        "help" => Some(&(handle_command_help as IronHandlerFn)),
+
+        "roll" => Some(&(handle_command_roll as IronHandlerFn)),
+        "roll_100" => Some(&(handle_command_roll_100 as IronHandlerFn)),
+
+        "roll_action" => Some(&(handle_command_roll_action as IronHandlerFn)),
+        "roll_theme" => Some(&(handle_command_roll_theme as IronHandlerFn)),
+        "roll_action_and_theme" => Some(&(handle_command_roll_action_and_theme as IronHandlerFn)),
+
+        "roll_ask_the_oracle" => Some(&(handle_command_roll_ask_the_oracle as IronHandlerFn)),
+
+        "roll_region" => Some(&(handle_command_roll_region as IronHandlerFn)),
+        "roll_location" => Some(&(handle_command_roll_location as IronHandlerFn)),
+        "roll_coastal_waters_location" => {
+            Some(&(handle_command_roll_coastal_waters_location as IronHandlerFn))
+        }
+        "roll_location_descriptors" => {
+            Some(&(handle_command_roll_location_descriptors as IronHandlerFn))
+        }
+
+        "roll_settlement_name" => Some(&(handle_command_roll_settlement_name as IronHandlerFn)),
+        "roll_quick_settlement_name" => {
+            Some(&(handle_command_roll_quick_settlement_name as IronHandlerFn))
+        }
+        "roll_settlement_trouble" => {
+            Some(&(handle_command_roll_settlement_trouble as IronHandlerFn))
+        }
+
+        "roll_character" => Some(&(handle_command_roll_character as IronHandlerFn)),
+        "roll_character_role" => Some(&(handle_command_roll_character_role as IronHandlerFn)),
+        "roll_character_goal" => Some(&(handle_command_roll_character_goal as IronHandlerFn)),
+        "roll_character_descriptor" => {
+            Some(&(handle_command_roll_character_descriptor as IronHandlerFn))
+        }
+
+        "roll_ironlander_names" => Some(&(handle_command_roll_ironlander_names as IronHandlerFn)),
+        "roll_elf_names" => Some(&(handle_command_roll_elf_names as IronHandlerFn)),
+        "roll_giant_names" => Some(&(handle_command_roll_giant_names as IronHandlerFn)),
+        "roll_varou_names" => Some(&(handle_command_roll_varou_names as IronHandlerFn)),
+        "roll_troll_names" => Some(&(handle_command_roll_troll_names as IronHandlerFn)),
+
+        "roll_challenge_rank" => Some(&(handle_command_roll_challenge_rank as IronHandlerFn)),
+        "roll_combat_action" => Some(&(handle_command_roll_combat_action as IronHandlerFn)),
+        "roll_major_plot_twist" => Some(&(handle_command_roll_major_plot_twist as IronHandlerFn)),
+        "roll_mystic_backlash" => Some(&(handle_command_roll_mystic_backlash as IronHandlerFn)),
+
+        "test" => Some(&(handle_command_test as IronHandlerFn)),
+        _ => None,
     }
 }
 
