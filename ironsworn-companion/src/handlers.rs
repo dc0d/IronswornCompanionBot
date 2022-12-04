@@ -500,7 +500,8 @@ pub fn handle_command_test(
     bot: &Bot,
     _app_env: Arc<Env>,
 ) -> Result<JsonRequest<SendMessage>, Error> {
-    let signal = "KavehShahbazian Sat Dec  3 23:36:05 CET 2022";
+    let github_sha = option_env!("GITHUB_SHA").unwrap_or("unknown GITHUB_SHA");
+    let signal = format!("KavehShahbazian {}", github_sha);
     Ok(bot.send_message(msg.chat.id, signal))
 }
 
