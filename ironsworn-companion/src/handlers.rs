@@ -508,3 +508,26 @@ pub fn handle_command_test(
 pub enum Error {
     Text(String),
 }
+
+pub type IronHandlerFn =
+    fn(msg: &Message, bot: &Bot, app_env: Arc<Env>) -> Result<JsonRequest<SendMessage>, Error>;
+
+impl IronHandler for IronHandlerFn {
+    fn handle(
+        &self,
+        msg: &Message,
+        bot: &Bot,
+        app_env: Arc<Env>,
+    ) -> Result<JsonRequest<SendMessage>, Error> {
+        self(msg, bot, app_env)
+    }
+}
+
+pub trait IronHandler {
+    fn handle(
+        &self,
+        msg: &Message,
+        bot: &Bot,
+        app_env: Arc<Env>,
+    ) -> Result<JsonRequest<SendMessage>, Error>;
+}
