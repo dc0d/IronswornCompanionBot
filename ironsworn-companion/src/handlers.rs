@@ -1,6 +1,11 @@
 use std::sync::Arc;
 
-use teloxide::{payloads::SendMessage, prelude::*, requests::JsonRequest};
+use teloxide::{
+    payloads::SendMessage,
+    prelude::*,
+    requests::JsonRequest,
+    types::{InlineKeyboardButton, InlineKeyboardMarkup},
+};
 
 use crate::dice;
 use crate::handler_env::Env;
@@ -133,10 +138,35 @@ pub fn handle_command_roll_ask_the_oracle(
     bot: &Bot,
     _app_env: Arc<Env>,
 ) -> Result<JsonRequest<SendMessage>, Error> {
-    let chance = dice::roll_100();
-    let text = AskTheOracle::chance_to_text(chance);
+    let keyboard = make_ask_the_oracle_keyboard();
+    Ok(bot
+        .send_message(msg.chat.id, "Choose the odds:")
+        .reply_markup(keyboard))
+}
 
-    Ok(bot.send_message(msg.chat.id, format!("{} 🎲 {}", text, chance)))
+fn make_ask_the_oracle_keyboard() -> InlineKeyboardMarkup {
+    let mut keyboard: Vec<Vec<InlineKeyboardButton>> = vec![];
+
+    let options = [
+        AskTheOracle::SmallChance,
+        AskTheOracle::Unlikely,
+        AskTheOracle::FiftyFifty,
+        AskTheOracle::Likely,
+        AskTheOracle::AlmostCertain,
+    ];
+
+    for row_options in options.chunks(2) {
+        let row = row_options
+            .iter()
+            .map(|&opt| {
+                InlineKeyboardButton::callback(opt.to_string(), format!("ORCL::ATO::{}", opt))
+            })
+            .collect();
+
+        keyboard.push(row);
+    }
+
+    InlineKeyboardMarkup::new(keyboard)
 }
 
 pub fn handle_command_roll_region(

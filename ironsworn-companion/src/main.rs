@@ -20,7 +20,9 @@ async fn main() {
 
     let bot = Bot::from_env();
 
-    let handler = dptree::entry().branch(Update::filter_message().endpoint(message_dispatcher));
+    let handler = dptree::entry()
+        .branch(Update::filter_message().endpoint(message_dispatcher))
+        .branch(Update::filter_callback_query().endpoint(callback_dispatcher));
 
     log::info!(">>> dispatching");
     Dispatcher::builder(bot, handler)
@@ -29,6 +31,36 @@ async fn main() {
         .build()
         .dispatch()
         .await;
+}
+
+async fn callback_dispatcher(bot: Bot, q: CallbackQuery) -> Result<(), Error> {
+    log::info!("debug received query: {:?}", q);
+
+    if let Some(data) = q.data {
+        if data.starts_with("ORCL::ATO::") {
+            let odd = data
+                .trim_start_matches("ORCL::ATO::")
+                .parse::<AskTheOracle>()
+                .unwrap();
+
+            let chance = dice::roll_100();
+            let resolve = odd.resolve(chance);
+
+            let _ = bot.answer_callback_query(q.id).await;
+
+            if let Some(Message { id, chat, .. }) = q.message {
+                let _ = bot.delete_message(chat.id, id).await;
+                let _ = bot
+                    .send_message(chat.id, format!("{}: {} 🎲 {}", odd, resolve, chance))
+                    .await;
+            } else {
+                log::warn!("CALLBACK WITH DATA NOT HANDLED: {:?}", data);
+            }
+        }
+        log::info!("callback_dispatcher data: {:?}", data);
+    }
+
+    Ok(())
 }
 
 async fn message_dispatcher(msg: Message, bot: Bot, app_env: Arc<Env>) -> Result<(), Error> {
