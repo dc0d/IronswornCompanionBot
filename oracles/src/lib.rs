@@ -380,4 +380,13 @@ impl Oracles {
             .map(|item| item.clone().into())
             .collect::<Vec<ironsworn_moves::Category>>()
     }
+
+    pub fn get_ironsworn_moves_names(&self) -> Vec<(usize, String)> {
+        self.get_ironsworn_moves()
+            .clone()
+            .iter()
+            .enumerate()
+            .map(|(index, item)| (index, item.name.clone()))
+            .collect()
+    }
 }
