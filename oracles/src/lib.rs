@@ -1,23 +1,27 @@
+use oracle_loader::*;
+
 pub struct Oracles {
-    prompts: oracle_loader::ironsworn_oracles_prompts::Root,
-    places: oracle_loader::ironsworn_oracles_place::Root,
-    settlements: oracle_loader::ironsworn_oracles_settlement::Root,
-    characters: oracle_loader::ironsworn_oracles_character::Root,
-    names: oracle_loader::ironsworn_oracles_names::Root,
-    turning_points: oracle_loader::ironsworn_oracles_turning_point::Root,
-    move_oracles: oracle_loader::ironsworn_move_oracles::Root,
+    prompts: ironsworn_oracles_prompts::Root,
+    places: ironsworn_oracles_place::Root,
+    settlements: ironsworn_oracles_settlement::Root,
+    characters: ironsworn_oracles_character::Root,
+    names: ironsworn_oracles_names::Root,
+    turning_points: ironsworn_oracles_turning_point::Root,
+    move_oracles: ironsworn_move_oracles::Root,
+    ironsworn_moves: ironsworn_moves::Root,
 }
 
 impl Oracles {
     pub fn load() -> Oracles {
         Oracles {
-            prompts: oracle_loader::load_prompts(),
-            places: oracle_loader::load_places(),
-            settlements: oracle_loader::load_settlements(),
-            characters: oracle_loader::load_characters(),
-            names: oracle_loader::load_names(),
-            turning_points: oracle_loader::load_turning_points(),
-            move_oracles: oracle_loader::load_ironsworn_move_oracles(),
+            prompts: load_prompts(),
+            places: load_places(),
+            settlements: load_settlements(),
+            characters: load_characters(),
+            names: load_names(),
+            turning_points: load_turning_points(),
+            move_oracles: load_ironsworn_move_oracles(),
+            ironsworn_moves: load_ironsworn_moves(),
         }
     }
 
@@ -365,5 +369,15 @@ impl Oracles {
             .filter(|&item| item.chance >= chance)
             .nth(0)?;
         Some(item.description.to_string())
+    }
+
+    pub fn get_ironsworn_moves(&self) -> Vec<ironsworn_moves::Category> {
+        self.ironsworn_moves
+            .categories
+            .clone()
+            .iter()
+            .filter(|&item| &item.name != "Delve Moves" && &item.name != "Optional Delve Moves")
+            .map(|item| item.clone().into())
+            .collect::<Vec<ironsworn_moves::Category>>()
     }
 }
