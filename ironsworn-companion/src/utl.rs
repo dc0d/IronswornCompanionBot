@@ -101,13 +101,14 @@ impl fmt::Display for YesNo {
 
 pub const COMMAN_LIST: &str = "
 /start - start
-/help - show help
+/help - help
 /roll - roll action die + challenge dice (or /roll N like /roll 20)
 /roll_action_and_theme - roll on action_and_theme oracles
-/roll_ask_the_oracle - roll on ask_the_oracle (probabilities)
-/roll_100 - roll a d100
+/roll_ask_the_oracle - roll on 'ASK THE ORACLE' Fate Move (probabilities)
 /roll_character - roll on character oracles
 /roll_major_plot_twist - roll on major_plot_twist oracle
+/roll_pay_the_price - roll on 'PAY THE PRICE' Fate Move
+/roll_100 - roll a d100
 /roll_challenge_rank - roll on challenge_rank oracle
 /roll_combat_action - roll on combat_action oracle
 /roll_action - roll on action oracle

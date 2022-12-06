@@ -173,6 +173,8 @@ fn command_handler_factory(cmd_text: &str) -> Option<&dyn IronHandler> {
         "roll_major_plot_twist" => Some(&(handle_command_roll_major_plot_twist as IronHandlerFn)),
         "roll_mystic_backlash" => Some(&(handle_command_roll_mystic_backlash as IronHandlerFn)),
 
+        "roll_pay_the_price" => Some(&(handle_command_roll_pay_the_price as IronHandlerFn)),
+
         "test" => Some(&(handle_command_test as IronHandlerFn)),
         _ => None,
     }

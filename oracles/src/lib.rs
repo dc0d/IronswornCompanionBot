@@ -5,6 +5,7 @@ pub struct Oracles {
     characters: oracle_loader::ironsworn_oracles_character::Root,
     names: oracle_loader::ironsworn_oracles_names::Root,
     turning_points: oracle_loader::ironsworn_oracles_turning_point::Root,
+    move_oracles: oracle_loader::ironsworn_move_oracles::Root,
 }
 
 impl Oracles {
@@ -16,6 +17,7 @@ impl Oracles {
             characters: oracle_loader::load_characters(),
             names: oracle_loader::load_names(),
             turning_points: oracle_loader::load_turning_points(),
+            move_oracles: oracle_loader::load_ironsworn_move_oracles(),
         }
     }
 
@@ -343,6 +345,20 @@ impl Oracles {
             .oracles
             .iter()
             .find(|&item| item.name == "Mystic Backlash")?;
+        let item = oracle
+            .oracle_table
+            .iter()
+            .filter(|&item| item.chance >= chance)
+            .nth(0)?;
+        Some(item.description.to_string())
+    }
+
+    pub fn get_pay_the_price(&self, chance: i64) -> Option<String> {
+        let oracle = self
+            .move_oracles
+            .oracles
+            .iter()
+            .find(|&item| item.name == "Pay the Price")?;
         let item = oracle
             .oracle_table
             .iter()

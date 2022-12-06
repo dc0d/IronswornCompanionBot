@@ -1,3 +1,4 @@
+pub mod ironsworn_move_oracles;
 pub mod ironsworn_oracles_character;
 pub mod ironsworn_oracles_names;
 pub mod ironsworn_oracles_place;
@@ -138,6 +139,35 @@ mod tests_load_prompts {
             assert_eq!(100, themes.oracle_table.len());
         } else {
             panic!("theme oracle not found");
+        }
+    }
+}
+
+//
+
+pub fn load_ironsworn_move_oracles() -> ironsworn_move_oracles::Root {
+    serde_json::from_str(&IRONSWORN_MOVE_ORACLES).unwrap()
+}
+
+const IRONSWORN_MOVE_ORACLES: &str = include_str!("ironsworn_move_oracles.json");
+
+#[cfg(test)]
+mod tests_ironsworn_move_oracles {
+    use core::panic;
+
+    use super::*;
+
+    #[test]
+    fn smoke_test_ironsworn_move_oracles() {
+        let orcl = load_ironsworn_move_oracles();
+        if let Some(actions) = orcl
+            .oracles
+            .iter()
+            .find(|&item| item.name == "Pay the Price")
+        {
+            assert_eq!(16, actions.oracle_table.len());
+        } else {
+            panic!("action oracle not found");
         }
     }
 }

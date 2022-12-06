@@ -525,6 +525,22 @@ pub fn handle_command_roll_mystic_backlash(
     }
 }
 
+pub fn handle_command_roll_pay_the_price(
+    msg: &Message,
+    bot: &Bot,
+    app_env: Arc<Env>,
+) -> Result<JsonRequest<SendMessage>, Error> {
+    let chance = dice::roll_100();
+    if let Some(descriptor) = app_env.oracles.get_pay_the_price(chance) {
+        Ok(bot.send_message(msg.chat.id, format!("{} 🎲 {}", descriptor, chance)))
+    } else {
+        Err(Error::Text(format!(
+            "ERROR IN CHOOSING handle_command_roll_mystic_backlash: {}",
+            chance,
+        )))
+    }
+}
+
 pub fn handle_command_test(
     msg: &Message,
     bot: &Bot,
