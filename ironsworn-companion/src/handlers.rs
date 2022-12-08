@@ -27,6 +27,73 @@ pub fn handle_command_help(
     Ok(bot.send_message(msg.chat.id, format!("{}", COMMAN_LIST)))
 }
 
+pub fn handle_show_moves_categories(
+    msg: &Message,
+    bot: &Bot,
+    app_env: Arc<Env>,
+) -> Result<JsonRequest<SendMessage>, Error> {
+    let keyboard = make_show_moves_categories_keyboard(app_env);
+
+    Ok(bot
+        .send_message(msg.chat.id, "Choose the moves category:")
+        .reply_markup(keyboard))
+}
+
+fn make_show_moves_categories_keyboard(app_env: Arc<Env>) -> InlineKeyboardMarkup {
+    let mut keyboard: Vec<Vec<InlineKeyboardButton>> = vec![];
+
+    let options = app_env.oracles.get_ironsworn_moves_categories_names();
+
+    for row_options in options.chunks(2) {
+        let row = row_options
+            .iter()
+            .map(|(index, cat_name)| {
+                InlineKeyboardButton::callback(
+                    cat_name.to_string(),
+                    format!("{}{}::{}", CQPX_LIST_MOVCATS, cat_name, index),
+                )
+            })
+            .collect();
+
+        keyboard.push(row);
+    }
+
+    InlineKeyboardMarkup::new(keyboard)
+}
+
+pub fn make_show_moves_keyboard(
+    app_env: Arc<Env>,
+    cat_index: usize,
+    _name: String,
+) -> InlineKeyboardMarkup {
+    let mut keyboard: Vec<Vec<InlineKeyboardButton>> = vec![];
+
+    if let Some(cat) = app_env.oracles.get_ironsworn_moves().get(cat_index) {
+        let options: Vec<(usize, String)> = cat
+            .moves
+            .iter()
+            .enumerate()
+            .map(|(index, elem)| (index, elem.name.clone()))
+            .collect();
+
+        for row_options in options.chunks(2) {
+            let row = row_options
+                .iter()
+                .map(|(index, move_name)| {
+                    InlineKeyboardButton::callback(
+                        move_name.to_string(),
+                        format!("{}{}::{}::{}", CQPX_LIST_MOVS, cat_index, move_name, index),
+                    )
+                })
+                .collect();
+
+            keyboard.push(row);
+        }
+    }
+
+    InlineKeyboardMarkup::new(keyboard)
+}
+
 pub fn handle_command_roll(
     msg: &Message,
     bot: &Bot,
@@ -159,7 +226,7 @@ fn make_ask_the_oracle_keyboard() -> InlineKeyboardMarkup {
         let row = row_options
             .iter()
             .map(|&opt| {
-                InlineKeyboardButton::callback(opt.to_string(), format!("ORCL::ATO::{}", opt))
+                InlineKeyboardButton::callback(opt.to_string(), format!("{}{}", CQPX_ORCL_ATO, opt))
             })
             .collect();
 

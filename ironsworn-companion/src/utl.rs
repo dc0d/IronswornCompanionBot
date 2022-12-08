@@ -1,7 +1,5 @@
 use std::fmt;
 
-pub const BOT_NAME: &str = "IronswornCompanionBot";
-
 /*
 Odds                The answer is ‘yes’ if you roll:
 
@@ -75,6 +73,8 @@ impl std::str::FromStr for AskTheOracle {
     }
 }
 
+//
+
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub enum YesNo {
     Yes,
@@ -98,6 +98,17 @@ impl fmt::Display for YesNo {
         }
     }
 }
+
+//
+
+// CallbackQueryPrefix
+pub const CQPX_ORCL_ATO: &str = "ORCL::ATO::";
+pub const CQPX_LIST_MOVCATS: &str = "LIST::MOVCATS::";
+pub const CQPX_LIST_MOVS: &str = "LIST::MOVS::";
+
+//
+
+pub const BOT_NAME: &str = "IronswornCompanionBot";
 
 pub const COMMAN_LIST: &str = "
 /start - start

@@ -1,4 +1,5 @@
 pub mod ironsworn_move_oracles;
+pub mod ironsworn_moves;
 pub mod ironsworn_oracles_character;
 pub mod ironsworn_oracles_names;
 pub mod ironsworn_oracles_place;
@@ -169,5 +170,33 @@ mod tests_ironsworn_move_oracles {
         } else {
             panic!("action oracle not found");
         }
+    }
+}
+
+//
+
+pub fn load_ironsworn_moves() -> ironsworn_moves::Root {
+    serde_json::from_str(&IRONSWORN_MOVES).unwrap()
+}
+
+const IRONSWORN_MOVES: &str = include_str!("ironsworn_moves.json");
+
+#[cfg(test)]
+mod tests_ironsworn_moves {
+    use super::*;
+
+    #[test]
+    fn smoke_test_ironsworn_move_oracles() {
+        let orcl = load_ironsworn_moves();
+        assert_eq!(8, orcl.categories.len());
+
+        assert_eq!("Adventure Moves", orcl.categories[0].name);
+        assert_eq!("Relationship Moves", orcl.categories[1].name);
+        assert_eq!("Combat Moves", orcl.categories[2].name);
+        assert_eq!("Suffer Moves", orcl.categories[3].name);
+        assert_eq!("Quest Moves", orcl.categories[4].name);
+        assert_eq!("Fate Moves", orcl.categories[5].name);
+        assert_eq!("Delve Moves", orcl.categories[6].name);
+        assert_eq!("Optional Delve Moves", orcl.categories[7].name);
     }
 }
