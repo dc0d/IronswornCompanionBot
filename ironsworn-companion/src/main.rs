@@ -33,31 +33,64 @@ async fn main() {
         .await;
 }
 
-async fn callback_dispatcher(bot: Bot, q: CallbackQuery) -> Result<(), Error> {
+async fn callback_dispatcher(bot: Bot, q: CallbackQuery, app_env: Arc<Env>) -> Result<(), Error> {
     log::info!("debug received query: {:?}", q);
 
-    if let Some(data) = q.data {
-        if data.starts_with("ORCL::ATO::") {
-            let odd = data
-                .trim_start_matches("ORCL::ATO::")
-                .parse::<AskTheOracle>()
-                .unwrap();
+    match q.data {
+        None => (),
+        Some(data) => {
+            if data.starts_with(CQPX_ORCL_ATO) {
+                let odd = data
+                    .trim_start_matches(CQPX_ORCL_ATO)
+                    .parse::<AskTheOracle>()
+                    .unwrap();
 
-            let chance = dice::roll_100();
-            let resolve = odd.resolve(chance);
+                let chance = dice::roll_100();
+                let resolve = odd.resolve(chance);
 
-            let _ = bot.answer_callback_query(q.id).await;
+                let _ = bot.answer_callback_query(q.id).await;
 
-            if let Some(Message { id, chat, .. }) = q.message {
-                let _ = bot.delete_message(chat.id, id).await;
-                let _ = bot
-                    .send_message(chat.id, format!("{}: {} 🎲 {}", odd, resolve, chance))
-                    .await;
-            } else {
-                log::warn!("CALLBACK WITH DATA NOT HANDLED: {:?}", data);
+                if let Some(Message { id, chat, .. }) = q.message {
+                    let _ = bot.delete_message(chat.id, id).await;
+                    let _ = bot
+                        .send_message(chat.id, format!("{}: {} 🎲 {}", odd, resolve, chance))
+                        .await;
+                } else {
+                    log::warn!("CALLBACK WITH DATA NOT HANDLED: {:?}", data);
+                }
+            } else if data.starts_with(CQPX_LIST_MOVCATS) {
+                let _ = bot.answer_callback_query(q.id).await;
+
+                if let Some(Message { id, chat, .. }) = q.message {
+                    let _ = bot.delete_message(chat.id, id).await;
+
+                    let parts: Vec<String> = data
+                        .trim_start_matches(CQPX_LIST_MOVCATS)
+                        .split("::")
+                        .map(|x| x.to_string())
+                        .collect();
+
+                    match &parts[..] {
+                        [name, index] => {
+                            let index = index.parse::<usize>().unwrap_or_default();
+                            let keyboard = make_show_moves_keyboard(app_env, index, name.into());
+
+                            let _ = bot
+                                .send_message(chat.id, "Choose the move:")
+                                .reply_markup(keyboard)
+                                .await;
+                        }
+                        _ => (),
+                    };
+                } else {
+                    log::warn!("CALLBACK WITH DATA NOT HANDLED: {:?}", data);
+                }
+            } else if data.starts_with(CQPX_LIST_MOVS) {
+                let _ = bot.answer_callback_query(q.id).await;
             }
+
+            log::info!("callback_dispatcher data: {:?}", data);
         }
-        log::info!("callback_dispatcher data: {:?}", data);
     }
 
     Ok(())

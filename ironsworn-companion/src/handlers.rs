@@ -50,12 +50,45 @@ fn make_show_moves_categories_keyboard(app_env: Arc<Env>) -> InlineKeyboardMarku
             .map(|(index, cat_name)| {
                 InlineKeyboardButton::callback(
                     cat_name.to_string(),
-                    format!("LIST::MOVCATS::{}::{}", cat_name, index),
+                    format!("{}{}::{}", CQPX_LIST_MOVCATS, cat_name, index),
                 )
             })
             .collect();
 
         keyboard.push(row);
+    }
+
+    InlineKeyboardMarkup::new(keyboard)
+}
+
+pub fn make_show_moves_keyboard(
+    app_env: Arc<Env>,
+    index: usize,
+    _name: String,
+) -> InlineKeyboardMarkup {
+    let mut keyboard: Vec<Vec<InlineKeyboardButton>> = vec![];
+
+    if let Some(cat) = app_env.oracles.get_ironsworn_moves().get(index) {
+        let options: Vec<(usize, String)> = cat
+            .moves
+            .iter()
+            .enumerate()
+            .map(|(index, elem)| (index, elem.name.clone()))
+            .collect();
+
+        for row_options in options.chunks(2) {
+            let row = row_options
+                .iter()
+                .map(|(index, move_name)| {
+                    InlineKeyboardButton::callback(
+                        move_name.to_string(),
+                        format!("{}{}::{}", CQPX_LIST_MOVS, move_name, index),
+                    )
+                })
+                .collect();
+
+            keyboard.push(row);
+        }
     }
 
     InlineKeyboardMarkup::new(keyboard)
@@ -193,7 +226,7 @@ fn make_ask_the_oracle_keyboard() -> InlineKeyboardMarkup {
         let row = row_options
             .iter()
             .map(|&opt| {
-                InlineKeyboardButton::callback(opt.to_string(), format!("ORCL::ATO::{}", opt))
+                InlineKeyboardButton::callback(opt.to_string(), format!("{}{}", CQPX_ORCL_ATO, opt))
             })
             .collect();
 
