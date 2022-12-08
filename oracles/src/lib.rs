@@ -381,7 +381,7 @@ impl Oracles {
             .collect::<Vec<ironsworn_moves::Category>>()
     }
 
-    pub fn get_ironsworn_moves_names(&self) -> Vec<(usize, String)> {
+    pub fn get_ironsworn_moves_categories_names(&self) -> Vec<(usize, String)> {
         self.get_ironsworn_moves()
             .clone()
             .iter()

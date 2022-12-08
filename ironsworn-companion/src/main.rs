@@ -129,6 +129,8 @@ fn command_handler_factory(cmd_text: &str) -> Option<&dyn IronHandler> {
 
         "help" => Some(&(handle_command_help as IronHandlerFn)),
 
+        "show_moves_categories" => Some(&(handle_show_moves_categories as IronHandlerFn)),
+
         "roll" => Some(&(handle_command_roll as IronHandlerFn)),
         "roll_100" => Some(&(handle_command_roll_100 as IronHandlerFn)),
 

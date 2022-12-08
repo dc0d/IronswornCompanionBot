@@ -13,30 +13,7 @@
 - Oracle data comes from amazing [datasworn](https://github.com/rsek/datasworn) by @rsek.
 - The bot is deployed to [fly.io](https://fly.io).
 - The amazing bot framework [teloxide](https://github.com/teloxide/teloxide) by @teloxide is used.
-## configuration
 
-Set the Telegram bot token:
-```
-export TELOXIDE_TOKEN=
-```
+# checklist
 
-Set log level:
-```
-export RUST_LOG=debug
-```
-
-## docker
-
-```
-docker build -t ironsworn-companion .
-```
-
-```
-docker run -it --rm -e RUST_LOG=info -e TELOXIDE_TOKEN=<TOKEN> ironsworn-companion
-```
-
-## references
-
-https://docs.rs/rand/latest/rand/#
-https://transform.tools/json-to-rust-serde
-
+- rename `roll_ask_the_oracle` command to `ask_the_oracle`
