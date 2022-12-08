@@ -63,12 +63,12 @@ fn make_show_moves_categories_keyboard(app_env: Arc<Env>) -> InlineKeyboardMarku
 
 pub fn make_show_moves_keyboard(
     app_env: Arc<Env>,
-    index: usize,
+    cat_index: usize,
     _name: String,
 ) -> InlineKeyboardMarkup {
     let mut keyboard: Vec<Vec<InlineKeyboardButton>> = vec![];
 
-    if let Some(cat) = app_env.oracles.get_ironsworn_moves().get(index) {
+    if let Some(cat) = app_env.oracles.get_ironsworn_moves().get(cat_index) {
         let options: Vec<(usize, String)> = cat
             .moves
             .iter()
@@ -82,7 +82,7 @@ pub fn make_show_moves_keyboard(
                 .map(|(index, move_name)| {
                     InlineKeyboardButton::callback(
                         move_name.to_string(),
-                        format!("{}{}::{}", CQPX_LIST_MOVS, move_name, index),
+                        format!("{}{}::{}::{}", CQPX_LIST_MOVS, cat_index, move_name, index),
                     )
                 })
                 .collect();

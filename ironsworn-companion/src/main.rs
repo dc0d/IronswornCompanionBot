@@ -87,6 +87,36 @@ async fn callback_dispatcher(bot: Bot, q: CallbackQuery, app_env: Arc<Env>) -> R
                 }
             } else if data.starts_with(CQPX_LIST_MOVS) {
                 let _ = bot.answer_callback_query(q.id).await;
+
+                if let Some(Message { id, chat, .. }) = q.message {
+                    let _ = bot.delete_message(chat.id, id).await;
+
+                    let parts: Vec<String> = data
+                        .trim_start_matches(CQPX_LIST_MOVS)
+                        .split("::")
+                        .map(|x| x.to_string())
+                        .collect();
+
+                    log::info!(">>> {:?}", parts);
+
+                    match &parts[..] {
+                        [cat_index, _name, index] => {
+                            let cat_index = cat_index.parse::<usize>().unwrap_or_default();
+                            let index = index.parse::<usize>().unwrap_or_default();
+                            if let Some(cat) = app_env.oracles.get_ironsworn_moves().get(cat_index)
+                            {
+                                if let Some(mov) = cat.moves.get(index) {
+                                    let text = format!("{}\n{}", mov.name, mov.text);
+                                    let _ = bot.send_message(chat.id, text).await;
+                                    // .parse_mode(ParseMode::MarkdownV2)
+                                }
+                            }
+                        }
+                        _ => (),
+                    };
+                } else {
+                    log::warn!("CALLBACK WITH DATA NOT HANDLED: {:?}", data);
+                }
             }
 
             log::info!("callback_dispatcher data: {:?}", data);
