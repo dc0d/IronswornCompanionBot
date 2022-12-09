@@ -70,17 +70,13 @@ async fn callback_dispatcher(bot: Bot, q: CallbackQuery, app_env: Arc<Env>) -> R
                         .map(|x| x.to_string())
                         .collect();
 
-                    match &parts[..] {
-                        [name, index] => {
-                            let index = index.parse::<usize>().unwrap_or_default();
-                            let keyboard = make_show_moves_keyboard(app_env, index, name.into());
-
-                            let _ = bot
-                                .send_message(chat.id, "Choose the move:")
-                                .reply_markup(keyboard)
-                                .await;
-                        }
-                        _ => (),
+                    if let [name, index] = &parts[..] {
+                        let index = index.parse::<usize>().unwrap_or_default();
+                        let keyboard = make_show_moves_keyboard(app_env, index, name.into());
+                        let _ = bot
+                            .send_message(chat.id, "Choose the move:")
+                            .reply_markup(keyboard)
+                            .await;
                     };
                 } else {
                     log::warn!("CALLBACK WITH DATA NOT HANDLED: {:?}", data);
@@ -99,20 +95,16 @@ async fn callback_dispatcher(bot: Bot, q: CallbackQuery, app_env: Arc<Env>) -> R
 
                     log::info!(">>> {:?}", parts);
 
-                    match &parts[..] {
-                        [cat_index, _name, index] => {
-                            let cat_index = cat_index.parse::<usize>().unwrap_or_default();
-                            let index = index.parse::<usize>().unwrap_or_default();
-                            if let Some(cat) = app_env.oracles.get_ironsworn_moves().get(cat_index)
-                            {
-                                if let Some(mov) = cat.moves.get(index) {
-                                    let text = format!("{}\n{}", mov.name, mov.text);
-                                    let _ = bot.send_message(chat.id, text).await;
-                                    // .parse_mode(ParseMode::MarkdownV2)
-                                }
+                    if let [cat_index, _name, index] = &parts[..] {
+                        let cat_index = cat_index.parse::<usize>().unwrap_or_default();
+                        let index = index.parse::<usize>().unwrap_or_default();
+                        if let Some(cat) = app_env.oracles.get_ironsworn_moves().get(cat_index) {
+                            if let Some(mov) = cat.moves.get(index) {
+                                let text = format!("{}\n{}", mov.name, mov.text);
+                                let _ = bot.send_message(chat.id, text).await;
+                                // .parse_mode(ParseMode::MarkdownV2)
                             }
                         }
-                        _ => (),
                     };
                 } else {
                     log::warn!("CALLBACK WITH DATA NOT HANDLED: {:?}", data);
@@ -256,8 +248,5 @@ fn is_command(msg: &Message) -> bool {
 
 fn is_text_help_command(msg: &Message) -> bool {
     let text = msg.text().unwrap_or_default().trim().to_lowercase();
-    match text.as_str() {
-        "help" => true,
-        _ => false,
-    }
+    matches!(text.as_str(), "help")
 }

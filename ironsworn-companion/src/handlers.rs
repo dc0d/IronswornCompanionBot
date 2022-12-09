@@ -24,7 +24,7 @@ pub fn handle_command_help(
     bot: &Bot,
     _app_env: Arc<Env>,
 ) -> Result<JsonRequest<SendMessage>, Error> {
-    Ok(bot.send_message(msg.chat.id, format!("{}", COMMAN_LIST)))
+    Ok(bot.send_message(msg.chat.id, COMMAN_LIST.to_string()))
 }
 
 pub fn handle_show_moves_categories(
@@ -112,10 +112,10 @@ pub fn handle_command_roll(
 
             let mut text_10 = format!("{} - {}", chance_10_1, chance_10_2);
             if chance_6 > chance_10_1 && chance_6 > chance_10_2 {
-                text_10 = text_10 + " 💪";
+                text_10 += " 💪";
             }
             if chance_10_1 == chance_10_2 {
-                text_10 = text_10 + " 🎁";
+                text_10 += " 🎁";
             }
 
             let text = format!("{} 🎲 {}", chance_6, text_10);
@@ -127,7 +127,7 @@ pub fn handle_command_roll(
 fn read_die_number(msg: &Message) -> Option<i64> {
     let (_cmd_txt, args) =
         teloxide::utils::command::parse_command(msg.text().unwrap_or_default(), BOT_NAME)?;
-    let first_arg = args.get(0)?;
+    let first_arg = args.first()?;
 
     match first_arg.to_string().parse().unwrap_or(-1) {
         -1 => None,
@@ -613,7 +613,8 @@ pub fn handle_command_test(
     bot: &Bot,
     _app_env: Arc<Env>,
 ) -> Result<JsonRequest<SendMessage>, Error> {
-    let github_sha = std::env::var("APP_GIT_HASH").unwrap_or("unknown APP_GIT_HASH".to_string());
+    let github_sha =
+        std::env::var("APP_GIT_HASH").unwrap_or_else(|_| "unknown APP_GIT_HASH".to_string());
     let signal = format!("KavehShahbazian {}", github_sha);
     Ok(bot.send_message(msg.chat.id, signal))
 }

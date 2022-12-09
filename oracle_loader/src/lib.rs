@@ -8,7 +8,7 @@ pub mod ironsworn_oracles_settlement;
 pub mod ironsworn_oracles_turning_point;
 
 pub fn load_turning_points() -> ironsworn_oracles_turning_point::Root {
-    serde_json::from_str(&IRONSWORN_ORACLES_TURNING_POINT).unwrap()
+    serde_json::from_str(IRONSWORN_ORACLES_TURNING_POINT).unwrap()
 }
 
 const IRONSWORN_ORACLES_TURNING_POINT: &str = include_str!("ironsworn_oracles_turning_point.json");
@@ -16,7 +16,7 @@ const IRONSWORN_ORACLES_TURNING_POINT: &str = include_str!("ironsworn_oracles_tu
 //
 
 pub fn load_names() -> ironsworn_oracles_names::Root {
-    serde_json::from_str(&IRONSWORN_ORACLES_NAMES).unwrap()
+    serde_json::from_str(IRONSWORN_ORACLES_NAMES).unwrap()
 }
 
 const IRONSWORN_ORACLES_NAMES: &str = include_str!("ironsworn_oracles_names.json");
@@ -24,7 +24,7 @@ const IRONSWORN_ORACLES_NAMES: &str = include_str!("ironsworn_oracles_names.json
 //
 
 pub fn load_characters() -> ironsworn_oracles_character::Root {
-    serde_json::from_str(&IRONSWORN_ORACLES_CHARACTER).unwrap()
+    serde_json::from_str(IRONSWORN_ORACLES_CHARACTER).unwrap()
 }
 
 const IRONSWORN_ORACLES_CHARACTER: &str = include_str!("ironsworn_oracles_character.json");
@@ -48,7 +48,7 @@ mod tests_load_characters {
 //
 
 pub fn load_settlements() -> ironsworn_oracles_settlement::Root {
-    serde_json::from_str(&IRONSWORN_ORACLES_SETTLEMENT).unwrap()
+    serde_json::from_str(IRONSWORN_ORACLES_SETTLEMENT).unwrap()
 }
 
 const IRONSWORN_ORACLES_SETTLEMENT: &str = include_str!("ironsworn_oracles_settlement.json");
@@ -77,7 +77,7 @@ mod tests_load_settlements {
 //
 
 pub fn load_places() -> ironsworn_oracles_place::Root {
-    serde_json::from_str(&IRONSWORN_ORACLES_PLACE).unwrap()
+    serde_json::from_str(IRONSWORN_ORACLES_PLACE).unwrap()
 }
 
 const IRONSWORN_ORACLES_PLACE: &str = include_str!("ironsworn_oracles_place.json");
@@ -112,7 +112,7 @@ mod tests_load_places {
 //
 
 pub fn load_prompts() -> ironsworn_oracles_prompts::Root {
-    serde_json::from_str(&IRONSWORN_ORACLES_PROMPTS).unwrap()
+    serde_json::from_str(IRONSWORN_ORACLES_PROMPTS).unwrap()
 }
 
 const IRONSWORN_ORACLES_PROMPTS: &str = include_str!("ironsworn_oracles_prompts.json");
@@ -147,7 +147,7 @@ mod tests_load_prompts {
 //
 
 pub fn load_ironsworn_move_oracles() -> ironsworn_move_oracles::Root {
-    serde_json::from_str(&IRONSWORN_MOVE_ORACLES).unwrap()
+    serde_json::from_str(IRONSWORN_MOVE_ORACLES).unwrap()
 }
 
 const IRONSWORN_MOVE_ORACLES: &str = include_str!("ironsworn_move_oracles.json");
@@ -176,7 +176,7 @@ mod tests_ironsworn_move_oracles {
 //
 
 pub fn load_ironsworn_moves() -> ironsworn_moves::Root {
-    serde_json::from_str(&IRONSWORN_MOVES).unwrap()
+    serde_json::from_str(IRONSWORN_MOVES).unwrap()
 }
 
 const IRONSWORN_MOVES: &str = include_str!("ironsworn_moves.json");

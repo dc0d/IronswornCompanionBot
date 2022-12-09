@@ -54,8 +54,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance)?;
         Some(item.description.to_string())
     }
 
@@ -68,8 +67,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance)?;
         Some(item.description.to_string())
     }
 
@@ -82,8 +80,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance)?;
         Some(item.description.to_string())
     }
 
@@ -96,8 +93,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance)?;
         Some(item.description.to_string())
     }
 
@@ -114,19 +110,17 @@ impl Oracles {
             .unwrap()
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance1)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance1)?;
 
         let name = table
             .oracle_table
             .iter()
             .flatten()
-            .filter(|&item2| item2.chance >= chance2)
-            .nth(0)?;
+            .find(|&item2| item2.chance >= chance2)?;
 
         let desc = table.description.to_string();
         let prompt = if let Some(prompt_text) = table.prompt.clone() {
-            prompt_text.to_string()
+            prompt_text
         } else {
             "".to_string()
         };
@@ -160,14 +154,12 @@ impl Oracles {
         let prefix = prefix_table
             .oracle_table
             .iter()
-            .filter(|&item1| item1.chance >= chance1)
-            .nth(0)?;
+            .find(|&item1| item1.chance >= chance1)?;
 
         let suffix = suffix_table
             .oracle_table
             .iter()
-            .filter(|&item2| item2.chance >= chance2)
-            .nth(0)?;
+            .find(|&item2| item2.chance >= chance2)?;
 
         Some((
             prefix.description.to_string(),
@@ -184,8 +176,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance)?;
         Some(item.description.to_string())
     }
 
@@ -198,8 +189,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance)?;
         Some(item.description.to_string())
     }
 
@@ -212,8 +202,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance)?;
         Some(item.description.to_string())
     }
 
@@ -226,8 +215,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance)?;
         Some(item.description.to_string())
     }
 
@@ -240,8 +228,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance200)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance200)?;
         Some(item.description.to_string())
     }
 
@@ -254,8 +241,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance)?;
         Some(item.description.to_string())
     }
 
@@ -268,8 +254,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance)?;
         Some(item.description.to_string())
     }
 
@@ -282,8 +267,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance)?;
         Some(item.description.to_string())
     }
 
@@ -296,8 +280,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance)?;
         Some(item.description.to_string())
     }
 
@@ -310,8 +293,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance)?;
         Some(item.description.to_string())
     }
 
@@ -324,8 +306,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance)?;
         Some(item.description.to_string())
     }
 
@@ -338,8 +319,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance)?;
         Some(item.description.to_string())
     }
 
@@ -352,8 +332,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance)?;
         Some(item.description.to_string())
     }
 
@@ -366,8 +345,7 @@ impl Oracles {
         let item = oracle
             .oracle_table
             .iter()
-            .filter(|&item| item.chance >= chance)
-            .nth(0)?;
+            .find(|&item| item.chance >= chance)?;
         Some(item.description.to_string())
     }
 
@@ -377,13 +355,12 @@ impl Oracles {
             .clone()
             .iter()
             .filter(|&item| &item.name != "Delve Moves" && &item.name != "Optional Delve Moves")
-            .map(|item| item.clone().into())
+            .cloned()
             .collect::<Vec<ironsworn_moves::Category>>()
     }
 
     pub fn get_ironsworn_moves_categories_names(&self) -> Vec<(usize, String)> {
         self.get_ironsworn_moves()
-            .clone()
             .iter()
             .enumerate()
             .map(|(index, item)| (index, item.name.clone()))

@@ -10,7 +10,7 @@ Unlikely            76 or greater
 Small Chance        91 or greater
 */
 
-#[derive(Copy, Clone, PartialEq, Debug)]
+#[derive(Copy, Clone, PartialEq, Eq, Debug)]
 pub enum AskTheOracle {
     SmallChance,
     Unlikely,
@@ -75,7 +75,7 @@ impl std::str::FromStr for AskTheOracle {
 
 //
 
-#[derive(Copy, Clone, PartialEq, Debug)]
+#[derive(Copy, Clone, PartialEq, Eq, Debug)]
 pub enum YesNo {
     Yes,
     No,
