@@ -201,7 +201,7 @@ fn command_handler_factory(cmd_text: &str) -> Option<&dyn IronHandler> {
         "roll_theme" => Some(&(handle_command_roll_theme as IronHandlerFn)),
         "roll_action_and_theme" => Some(&(handle_command_roll_action_and_theme as IronHandlerFn)),
 
-        "roll_ask_the_oracle" => Some(&(handle_command_roll_ask_the_oracle as IronHandlerFn)),
+        "ask_the_oracle" => Some(&(handle_command_ask_the_oracle as IronHandlerFn)),
 
         "roll_region" => Some(&(handle_command_roll_region as IronHandlerFn)),
         "roll_location" => Some(&(handle_command_roll_location as IronHandlerFn)),

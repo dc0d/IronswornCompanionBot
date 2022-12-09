@@ -200,7 +200,7 @@ pub fn handle_command_roll_action_and_theme(
     }
 }
 
-pub fn handle_command_roll_ask_the_oracle(
+pub fn handle_command_ask_the_oracle(
     msg: &Message,
     bot: &Bot,
     _app_env: Arc<Env>,
