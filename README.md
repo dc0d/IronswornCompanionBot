@@ -4,9 +4,9 @@
 
 > My goal for creating this repo is playing around with rust. I do not intend to maintain it.
 >
-> This is my ever first deployed rust app. No good coding practices is followed whatsoever. Because I just wanted to see something on the screen.
+> This is one of my first ever deployed rust app. No good coding practices is followed whatsoever. Because I just wanted to see something on the screen.
 >
-> The license is MIT. So, you can fork it and do whatever you want with the code.
+> The license is MIT. So, you can fork it and do whatever you want with the code - following MIT requirements & implications.
 
 # resources & tools
 
