@@ -1,0 +1,12 @@
+{
+  "name": "cljslab",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "shadow-cljs": "2.22.9"
+  },
+  "dependencies": {
+    "dparse": "^1.1.1",
+    "telegraf": "4.12.2"
+  }
+}

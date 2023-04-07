@@ -1,7 +1,0 @@
-[workspace]
-
-members = [
-    "ironsworn-companion",
-    "oracle_loader",
-    "oracles",
-]

@@ -1,0 +1,18 @@
+;; shadow-cljs configuration
+{:source-paths
+ ["test"
+  "src"]
+
+ :dependencies
+ []
+
+ :builds
+ {:cli
+  {:target :node-script
+   :main ironsworn-companion.delivery.app/main
+   :output-to "out/ironsworn-companion/ironsworn-companion.js"}
+
+  :test
+  {:target :node-test
+   :output-to "out/test/ironsworn-companion/ironsworn-companion-test.js"
+   :autorun true}}}
