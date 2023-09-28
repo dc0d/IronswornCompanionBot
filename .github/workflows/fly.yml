@@ -4,9 +4,30 @@ on: workflow_dispatch
 
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+permissions:
+  contents: read
+
 jobs:
   deploy:
-    name: Nop
     runs-on: ubuntu-latest
+    name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
+    strategy:
+      matrix:
+        otp: ['26.1']
+        elixir: ['1.15.6']
+
     steps:
-      - run: echo "nop"
+      - uses: actions/checkout@v4
+
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: ${{matrix.otp}}
+          elixir-version: ${{matrix.elixir}}
+
+      - run: mix deps.get
+      - run: mix compile --warnings-as-errors
+      - run: mix release
+
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: fly deploy --ha=false
