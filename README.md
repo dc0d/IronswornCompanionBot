@@ -1,14 +1,9 @@
 # ironsworn-companion
 
-> The bot can be reached [here](https://t.me/IronswornCompanionBot) on Telegram.
+> Do not use this code. This repository contains some experiments - implementing the same thing in different programming languages.
 
-> My goal for creating this repo is playing around with rust. I do not intend to maintain it.
->
-> This is one of my first ever deployed rust app. No good coding practices is followed whatsoever. Because I just wanted to see something on the screen.
->
-> The license is MIT. So, you can fork it and do whatever you want with the code - following MIT requirements & implications.
+The bot can be reached [here](https://t.me/IronswornCompanionBot) on Telegram.
 
 # resources & tools
 
 - Oracle data comes from amazing [datasworn](https://github.com/rsek/datasworn) by @rsek.
-- The amazing bot framework [teloxide](https://github.com/teloxide/teloxide) by @teloxide is used.
