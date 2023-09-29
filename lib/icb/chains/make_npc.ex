@@ -16,7 +16,7 @@ defmodule ICB.Chains.MakeCharacter do
   @impl true
   def handle(%{chat: chat, text: "/make_npc" <> _} = _update, context) do
     %{role: role, goal: goal, descriptor: descriptor, disposition: disposition} =
-      ICM.Oracles.make_npc()
+      ICB.Oracles.make_npc()
 
     context = %{
       context
@@ -32,7 +32,7 @@ defmodule ICB.Chains.MakeCharacter do
 
   @impl true
   def handle(update, context) do
-    Logger.warning(%{signal: :unandled_update, update: update, context: context})
+    Logger.warning(inspect(%{signal: :unandled_update, update: update, context: context}))
     {:done, context}
   end
 end

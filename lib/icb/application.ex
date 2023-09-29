@@ -11,7 +11,7 @@ defmodule ICB.Application do
       # Starts a worker by calling: ICB.Worker.start_link(arg)
       # {ICB.Worker, arg}
       ICB.PollingHandler,
-      ICM.Oracles
+      ICB.Oracles
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

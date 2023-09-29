@@ -2,9 +2,6 @@ name: Fly Deploy
 
 on: workflow_dispatch
 
-env:
-  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-
 permissions:
   contents: read
 
@@ -30,4 +27,7 @@ jobs:
       - run: mix release
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: fly deploy --ha=false
+      - run: |
+          flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

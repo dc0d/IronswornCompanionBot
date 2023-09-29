@@ -43,7 +43,7 @@ defmodule ICB.Chains.Roll do
 
   @impl true
   def handle(update, context) do
-    Logger.warning(%{signal: :unandled_update, update: update, context: context})
+    Logger.warning(inspect(%{signal: :unandled_update, update: update, context: context}))
     {:done, context}
   end
 

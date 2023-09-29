@@ -20,9 +20,10 @@ defmodule ICB.Chains.AskTheOracleCallback do
           _callback_query,
         context
       ) do
-    Telegex.delete_message(chat_id, message_id)
-    |> inspect()
-    |> Logger.info()
+    case Telegex.delete_message(chat_id, message_id) do
+      {:error, error} -> error |> inspect() |> Logger.error()
+      _ -> :ok
+    end
 
     odds_text =
       data
@@ -45,9 +46,10 @@ defmodule ICB.Chains.AskTheOracleCallback do
     Task.start(fn ->
       Process.sleep(361)
 
-      Telegex.send_message(chat_id, "#{resolution} 🎲 #{odds_text}")
-      |> inspect()
-      |> Logger.info()
+      case Telegex.send_message(chat_id, "#{resolution} 🎲 #{odds_text}") do
+        {:error, error} -> error |> inspect() |> Logger.error()
+        _ -> :ok
+      end
     end)
 
     {:done, context}
@@ -55,11 +57,13 @@ defmodule ICB.Chains.AskTheOracleCallback do
 
   @impl true
   def handle(callback_query, context) do
-    Logger.warning(%{
-      signal: :unandled_callback_query,
-      callback_query: callback_query,
-      context: context
-    })
+    Logger.warning(
+      inspect(%{
+        signal: :unandled_callback_query,
+        callback_query: callback_query,
+        context: context
+      })
+    )
 
     {:done, context}
   end

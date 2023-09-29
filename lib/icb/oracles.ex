@@ -1,25 +1,16 @@
-defmodule ICM.Oracles do
+defmodule ICB.Oracles do
   @moduledoc false
 
   use Agent
   alias ICB.Core.Model.Dice
 
   def start_link(_initial_value) do
-    {:ok, ironsworn_oracles_prompts_json_string} =
-      Application.app_dir(:icb, "/priv/ironsworn_oracles_prompts.json") |> File.read()
-
-    {:ok, ironsworn_oracles_prompts} = ironsworn_oracles_prompts_json_string |> Jaxon.decode()
-
-    {:ok, ironsworn_oracles_character_json_string} =
-      Application.app_dir(:icb, "/priv/ironsworn_oracles_character.json") |> File.read()
-
-    {:ok, ironsworn_oracles_character} = ironsworn_oracles_character_json_string |> Jaxon.decode()
-
     Agent.start_link(
       fn ->
         %{
-          ironsworn_oracles_prompts: ironsworn_oracles_prompts,
-          ironsworn_oracles_character: ironsworn_oracles_character
+          ironsworn_oracles_prompts: read_ironsworn_oracles_prompts(),
+          ironsworn_oracles_character: read_ironsworn_oracles_character(),
+          ironsworn_oracles_names: read_ironsworn_oracles_names()
         }
       end,
       name: __MODULE__
@@ -102,5 +93,89 @@ defmodule ICM.Oracles do
 
       %{role: role, goal: goal, descriptor: descriptor, disposition: disposition}
     end)
+  end
+
+  # make names
+
+  def name_ironlander do
+    {:ok, [rolled]} = Dice.roll("1d200")
+    table_name = "Ironlander Names"
+
+    give_name(rolled, table_name)
+  end
+
+  def name_elf do
+    {:ok, [rolled]} = Dice.roll("1d100")
+    table_name = "Elf Names"
+
+    give_name(rolled, table_name)
+  end
+
+  def name_giant do
+    {:ok, [rolled]} = Dice.roll("1d100")
+    table_name = "Giant Names"
+
+    give_name(rolled, table_name)
+  end
+
+  def name_varou do
+    {:ok, [rolled]} = Dice.roll("1d100")
+    table_name = "Varou Names"
+
+    give_name(rolled, table_name)
+  end
+
+  def name_troll do
+    {:ok, [rolled]} = Dice.roll("1d100")
+    table_name = "Troll Names"
+
+    give_name(rolled, table_name)
+  end
+
+  defp give_name(rolled, table_name) do
+    Agent.get(__MODULE__, fn %{ironsworn_oracles_names: ironsworn_oracles_names} = _state ->
+      %{"Oracles" => oracles} = ironsworn_oracles_names
+
+      #
+
+      %{"Oracle Table" => table_of_names} =
+        oracles
+        |> Enum.find(fn oracle -> oracle["Name"] == table_name end)
+
+      %{"Description" => name} =
+        table_of_names
+        |> Enum.find(fn record -> record["Chance"] >= rolled end)
+
+      name
+    end)
+  end
+
+  # loader functions
+
+  defp read_ironsworn_oracles_prompts do
+    {:ok, ironsworn_oracles_prompts_json_string} =
+      Application.app_dir(:icb, "/priv/ironsworn_oracles_prompts.json") |> File.read()
+
+    {:ok, ironsworn_oracles_prompts} = ironsworn_oracles_prompts_json_string |> Jaxon.decode()
+
+    ironsworn_oracles_prompts
+  end
+
+  defp read_ironsworn_oracles_character do
+    {:ok, ironsworn_oracles_character_json_string} =
+      Application.app_dir(:icb, "/priv/ironsworn_oracles_character.json") |> File.read()
+
+    {:ok, ironsworn_oracles_character} = ironsworn_oracles_character_json_string |> Jaxon.decode()
+
+    ironsworn_oracles_character
+  end
+
+  defp read_ironsworn_oracles_names do
+    {:ok, ironsworn_oracles_names_json_string} =
+      Application.app_dir(:icb, "/priv/ironsworn_oracles_names.json") |> File.read()
+
+    {:ok, ironsworn_oracles_names} = ironsworn_oracles_names_json_string |> Jaxon.decode()
+
+    ironsworn_oracles_names
   end
 end

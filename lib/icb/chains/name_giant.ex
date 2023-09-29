@@ -1,7 +1,7 @@
-defmodule ICB.Chains.Start do
+defmodule ICB.Chains.NameGiant do
   @moduledoc false
 
-  use Telegex.Chain, {:command, :start}
+  use Telegex.Chain, {:command, :name_giant}
   require Logger
 
   @impl true
@@ -14,20 +14,16 @@ defmodule ICB.Chains.Start do
   def match?(_message, _context), do: false
 
   @impl true
-  def handle(%{chat: chat, text: _text} = _update, context) do
+  def handle(%{chat: chat, text: "/name_giant" <> _} = _update, context) do
+    name =
+      ICB.Oracles.name_giant()
+
     context = %{
       context
       | payload: %{
           method: "sendMessage",
           chat_id: chat.id,
-          text: """
-          Let's get on with our journey! 🎲
-
-          You can see a list of command by:
-
-          -   Typing '/' to bring up the command menu or
-          -   Pressing the commands menu button.
-          """
+          text: "❝ #{name} ❞"
         }
     }
 
@@ -37,6 +33,6 @@ defmodule ICB.Chains.Start do
   @impl true
   def handle(update, context) do
     Logger.warning(inspect(%{signal: :unandled_update, update: update, context: context}))
-    {:done, %{}}
+    {:done, context}
   end
 end

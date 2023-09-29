@@ -15,7 +15,7 @@ defmodule ICB.Chains.ActionTheme do
 
   @impl true
   def handle(%{chat: chat, text: "/action_theme" <> _} = _update, context) do
-    {action, theme} = ICM.Oracles.action_theme()
+    {action, theme} = ICB.Oracles.action_theme()
 
     context = %{
       context
@@ -31,7 +31,7 @@ defmodule ICB.Chains.ActionTheme do
 
   @impl true
   def handle(update, context) do
-    Logger.warning(%{signal: :unandled_update, update: update, context: context})
+    Logger.warning(inspect(%{signal: :unandled_update, update: update, context: context}))
     {:done, context}
   end
 end
