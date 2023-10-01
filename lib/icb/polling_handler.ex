@@ -47,12 +47,32 @@ defmodule ICB.PollingHandler do
         },
         %Telegex.Type.BotCommand{
           command: "name_ironlander",
-          description: "gives ironlander name"
+          description: "give ironlander name"
         },
-        %Telegex.Type.BotCommand{command: "name_elf", description: "gives elf name"},
-        %Telegex.Type.BotCommand{command: "name_giant", description: "gives giant name"},
-        %Telegex.Type.BotCommand{command: "name_varou", description: "gives varou name"},
-        %Telegex.Type.BotCommand{command: "name_troll", description: "gives troll name"}
+        %Telegex.Type.BotCommand{command: "name_elf", description: "give elf name"},
+        %Telegex.Type.BotCommand{command: "name_giant", description: "give giant name"},
+        %Telegex.Type.BotCommand{command: "name_varou", description: "give varou name"},
+        %Telegex.Type.BotCommand{command: "name_troll", description: "give troll name"},
+        %Telegex.Type.BotCommand{
+          command: "settlement_quick",
+          description: "make quick settlement"
+        },
+        %Telegex.Type.BotCommand{
+          command: "reveal_challenge_rank",
+          description: "reveal challenge rank"
+        },
+        %Telegex.Type.BotCommand{
+          command: "reveal_combat_action",
+          description: "reveal combat action"
+        },
+        %Telegex.Type.BotCommand{
+          command: "reveal_major_plot_twist",
+          description: "reveal major plot twist"
+        },
+        %Telegex.Type.BotCommand{
+          command: "reveal_mystic_backlash",
+          description: "reveal mystic backlash"
+        }
       ]
 
       case Telegex.set_my_commands(commands) do

@@ -3,7 +3,6 @@ defmodule ICB.Chains.Roll do
 
   use Telegex.Chain, {:command, :roll}
   require Logger
-  alias ICB.Core.Model.Dice
 
   @ironsworn_dice_expr "1d6,2d10"
 
@@ -23,7 +22,7 @@ defmodule ICB.Chains.Roll do
 
   @impl true
   def handle(%{chat: chat, text: "/roll " <> n_text} = update, context) do
-    case Dice.roll(n_text) do
+    case get_dice().roll(n_text) do
       {:ok, result} ->
         context = %{
           context
@@ -48,7 +47,7 @@ defmodule ICB.Chains.Roll do
   end
 
   defp ironsworn_handler(%{chat: chat} = _update, context) do
-    {:ok, [d6, d10_1, d10_2]} = Dice.roll(@ironsworn_dice_expr)
+    {:ok, [d6, d10_1, d10_2]} = get_dice().roll(@ironsworn_dice_expr)
     rolled_challenge = "#{d10_1} - #{d10_2}"
     rolled_challenge = rolled_challenge <> if d6 > d10_1 && d6 > d10_2, do: " 💪", else: ""
     rolled_challenge = rolled_challenge <> if d10_1 == d10_2, do: " 🎁", else: ""
@@ -64,4 +63,6 @@ defmodule ICB.Chains.Roll do
 
     {:done, context}
   end
+
+  defp get_dice(), do: ICB.Core.Model.Dice
 end

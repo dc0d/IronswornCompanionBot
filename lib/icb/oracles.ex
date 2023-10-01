@@ -2,6 +2,7 @@ defmodule ICB.Oracles do
   @moduledoc false
 
   use Agent
+  require Logger
   alias ICB.Core.Model.Dice
 
   def start_link(_initial_value) do
@@ -10,7 +11,9 @@ defmodule ICB.Oracles do
         %{
           ironsworn_oracles_prompts: read_ironsworn_oracles_prompts(),
           ironsworn_oracles_character: read_ironsworn_oracles_character(),
-          ironsworn_oracles_names: read_ironsworn_oracles_names()
+          ironsworn_oracles_names: read_ironsworn_oracles_names(),
+          ironsworn_oracles_settlement: read_ironsworn_oracles_settlement(),
+          ironsworn_oracles_turning_point: read_ironsworn_oracles_turning_point()
         }
       end,
       name: __MODULE__
@@ -23,27 +26,11 @@ defmodule ICB.Oracles do
     Agent.get(__MODULE__, fn %{ironsworn_oracles_prompts: ironsworn_oracles_prompts} = _state ->
       %{"Oracles" => oracles} = ironsworn_oracles_prompts
 
-      #
+      %{"Oracle Table" => action_table} = find_oracle(oracles, "Action")
+      %{"Oracle Table" => theme_table} = find_oracle(oracles, "Theme")
 
-      %{"Oracle Table" => action_table} =
-        oracles
-        |> Enum.find(fn oracle -> oracle["Name"] == "Action" end)
-
-      %{"Oracle Table" => theme_table} =
-        oracles
-        |> Enum.find(fn oracle -> oracle["Name"] == "Theme" end)
-
-      #
-
-      %{"Description" => action} =
-        action_table
-        |> Enum.find(fn record -> record["Chance"] == action_r end)
-
-      %{"Description" => theme} =
-        theme_table
-        |> Enum.find(fn record -> record["Chance"] == theme_r end)
-
-      #
+      %{"Description" => action} = find_choice(action_table, action_r)
+      %{"Description" => theme} = find_choice(theme_table, theme_r)
 
       {action, theme}
     end)
@@ -55,43 +42,99 @@ defmodule ICB.Oracles do
     Agent.get(__MODULE__, fn %{ironsworn_oracles_character: ironsworn_oracles_character} = _state ->
       %{"Oracles" => oracles} = ironsworn_oracles_character
 
-      #
+      %{"Oracle Table" => role_table} = find_oracle(oracles, "Role")
+      %{"Oracle Table" => goal_table} = find_oracle(oracles, "Goal")
+      %{"Oracle Table" => descriptor_table} = find_oracle(oracles, "Descriptor")
+      %{"Oracle Table" => disposition_table} = find_oracle(oracles, "Disposition")
 
-      %{"Oracle Table" => role_table} =
-        oracles
-        |> Enum.find(fn oracle -> oracle["Name"] == "Role" end)
-
-      %{"Oracle Table" => goal_table} =
-        oracles
-        |> Enum.find(fn oracle -> oracle["Name"] == "Goal" end)
-
-      %{"Oracle Table" => descriptor_table} =
-        oracles
-        |> Enum.find(fn oracle -> oracle["Name"] == "Descriptor" end)
-
-      %{"Oracle Table" => disposition_table} =
-        oracles
-        |> Enum.find(fn oracle -> oracle["Name"] == "Disposition" end)
-
-      #
-
-      %{"Description" => role} =
-        role_table
-        |> Enum.find(fn record -> record["Chance"] >= role_r end)
-
-      %{"Description" => goal} =
-        goal_table
-        |> Enum.find(fn record -> record["Chance"] >= goal_r end)
-
-      %{"Description" => descriptor} =
-        descriptor_table
-        |> Enum.find(fn record -> record["Chance"] >= descriptor_r end)
-
-      %{"Description" => disposition} =
-        disposition_table
-        |> Enum.find(fn record -> record["Chance"] >= disposition_r end)
+      %{"Description" => role} = find_choice(role_table, role_r)
+      %{"Description" => goal} = find_choice(goal_table, goal_r)
+      %{"Description" => descriptor} = find_choice(descriptor_table, descriptor_r)
+      %{"Description" => disposition} = find_choice(disposition_table, disposition_r)
 
       %{role: role, goal: goal, descriptor: descriptor, disposition: disposition}
+    end)
+  end
+
+  # turing point
+
+  def reveal_challenge_rank do
+    table_name = "Challenge Rank"
+    {:ok, [rolled]} = Dice.roll("1d100")
+
+    Agent.get(__MODULE__, fn %{ironsworn_oracles_turning_point: ironsworn_oracles_turning_point} =
+                               _state ->
+      %{"Oracles" => oracles} = ironsworn_oracles_turning_point
+      %{"Oracle Table" => oracle_table} = find_oracle(oracles, table_name)
+      %{"Description" => answer} = find_choice(oracle_table, rolled)
+
+      answer
+    end)
+  end
+
+  def reveal_combat_action do
+    table_name = "Combat Action"
+    {:ok, [rolled]} = Dice.roll("1d100")
+
+    Agent.get(__MODULE__, fn %{ironsworn_oracles_turning_point: ironsworn_oracles_turning_point} =
+                               _state ->
+      %{"Oracles" => oracles} = ironsworn_oracles_turning_point
+      %{"Oracle Table" => oracle_table} = find_oracle(oracles, table_name)
+      %{"Description" => answer} = find_choice(oracle_table, rolled)
+
+      answer
+    end)
+  end
+
+  def reveal_major_plot_twist do
+    table_name = "Major Plot Twist"
+    {:ok, [rolled]} = Dice.roll("1d100")
+
+    Agent.get(__MODULE__, fn %{ironsworn_oracles_turning_point: ironsworn_oracles_turning_point} =
+                               _state ->
+      %{"Oracles" => oracles} = ironsworn_oracles_turning_point
+      %{"Oracle Table" => oracle_table} = find_oracle(oracles, table_name)
+      %{"Description" => answer} = find_choice(oracle_table, rolled)
+
+      answer
+    end)
+  end
+
+  def reveal_mystic_backlash do
+    table_name = "Mystic Backlash"
+    {:ok, [rolled]} = Dice.roll("1d100")
+
+    Agent.get(__MODULE__, fn %{ironsworn_oracles_turning_point: ironsworn_oracles_turning_point} =
+                               _state ->
+      %{"Oracles" => oracles} = ironsworn_oracles_turning_point
+      %{"Oracle Table" => oracle_table} = find_oracle(oracles, table_name)
+      %{"Description" => answer} = find_choice(oracle_table, rolled)
+
+      answer
+    end)
+  end
+
+  # settlement
+
+  def settlement_quick() do
+    {:ok, [settlement_trouble_r, prefix_r, suffix_r]} = Dice.roll("3d100")
+
+    Agent.get(__MODULE__, fn %{ironsworn_oracles_settlement: ironsworn_oracles_settlement} =
+                               _state ->
+      %{"Oracles" => oracles} = ironsworn_oracles_settlement
+
+      %{"Oracle Table" => settlement_trouble} = find_oracle(oracles, "Settlement Trouble")
+      quick_settlement_name = find_oracle(oracles, "Quick Settlement Name")
+
+      %{"Oracles" => quick_settlement_name_oracles} = quick_settlement_name
+      %{"Oracle Table" => prefix_table} = find_oracle(quick_settlement_name_oracles, "Prefix")
+      %{"Oracle Table" => suffix_table} = find_oracle(quick_settlement_name_oracles, "Suffix")
+
+      %{"Description" => trouble} = find_choice(settlement_trouble, settlement_trouble_r)
+      %{"Description" => prefix} = find_choice(prefix_table, prefix_r)
+      %{"Description" => suffix} = find_choice(suffix_table, suffix_r)
+
+      %{trouble: trouble, prefix: prefix, suffix: suffix}
     end)
   end
 
@@ -135,16 +178,8 @@ defmodule ICB.Oracles do
   defp give_name(rolled, table_name) do
     Agent.get(__MODULE__, fn %{ironsworn_oracles_names: ironsworn_oracles_names} = _state ->
       %{"Oracles" => oracles} = ironsworn_oracles_names
-
-      #
-
-      %{"Oracle Table" => table_of_names} =
-        oracles
-        |> Enum.find(fn oracle -> oracle["Name"] == table_name end)
-
-      %{"Description" => name} =
-        table_of_names
-        |> Enum.find(fn record -> record["Chance"] >= rolled end)
+      %{"Oracle Table" => table_of_names} = find_oracle(oracles, table_name)
+      %{"Description" => name} = find_choice(table_of_names, rolled)
 
       name
     end)
@@ -177,5 +212,37 @@ defmodule ICB.Oracles do
     {:ok, ironsworn_oracles_names} = ironsworn_oracles_names_json_string |> Jaxon.decode()
 
     ironsworn_oracles_names
+  end
+
+  defp read_ironsworn_oracles_settlement do
+    {:ok, ironsworn_oracles_settlement_json_string} =
+      Application.app_dir(:icb, "/priv/ironsworn_oracles_settlement.json") |> File.read()
+
+    {:ok, ironsworn_oracles_settlement} =
+      ironsworn_oracles_settlement_json_string |> Jaxon.decode()
+
+    ironsworn_oracles_settlement
+  end
+
+  defp read_ironsworn_oracles_turning_point do
+    {:ok, ironsworn_oracles_turning_point_json_string} =
+      Application.app_dir(:icb, "/priv/ironsworn_oracles_turning_point.json") |> File.read()
+
+    {:ok, ironsworn_oracles_turning_point} =
+      ironsworn_oracles_turning_point_json_string |> Jaxon.decode()
+
+    ironsworn_oracles_turning_point
+  end
+
+  # support
+
+  defp find_oracle(oracles, name) do
+    oracles
+    |> Enum.find(fn oracle -> oracle["Name"] == name end)
+  end
+
+  defp find_choice(table, rolled) do
+    table
+    |> Enum.find(fn record -> record["Chance"] >= rolled end)
   end
 end

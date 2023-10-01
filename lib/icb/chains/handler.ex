@@ -14,6 +14,11 @@ defmodule ICB.Chains.Handler do
     ICB.Chains.NameElf,
     ICB.Chains.NameGiant,
     ICB.Chains.NameVarou,
-    ICB.Chains.NameTroll
+    ICB.Chains.NameTroll,
+    ICB.Chains.SettlementQuick,
+    ICB.Chains.RevealChallengeRank,
+    ICB.Chains.RevealCombatAction,
+    ICB.Chains.RevealMajorPlotTwist,
+    ICB.Chains.RevealMysticBacklash
   ])
 end
