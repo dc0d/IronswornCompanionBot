@@ -17,12 +17,22 @@ defmodule ICB.Chains.RevealChallengeRank do
   def handle(%{chat: chat, text: "/reveal_challenge_rank" <> _} = _update, context) do
     answer = ICB.Oracles.reveal_challenge_rank()
 
+    answer_sign =
+      case answer do
+        "Troublesome" -> "🟢🟢🟢🟢🔴"
+        "Dangerous" -> "🟢🟢🟢🔴🔴"
+        "Formidable" -> "🟢🟢🔴🔴🔴"
+        "Extreme" -> "🟢🔴🔴🔴🔴"
+        "Epic" -> "🔴🔴🔴🔴🔴"
+        _ -> "👽"
+      end
+
     context = %{
       context
       | payload: %{
           method: "sendMessage",
           chat_id: chat.id,
-          text: "#{answer}"
+          text: "#{answer} #{answer_sign}"
         }
     }
 

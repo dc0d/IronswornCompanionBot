@@ -43,7 +43,7 @@ defmodule ICB.PollingHandler do
         %Telegex.Type.BotCommand{command: "ask_the_oracle", description: "ask the oracle"},
         %Telegex.Type.BotCommand{
           command: "action_theme",
-          description: "roll on action/theme oracles"
+          description: "set action & theme"
         },
         %Telegex.Type.BotCommand{
           command: "name_ironlander",

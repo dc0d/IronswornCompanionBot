@@ -22,7 +22,7 @@ defmodule ICB.Chains.ActionTheme do
       | payload: %{
           method: "sendMessage",
           chat_id: chat.id,
-          text: "#{action} #{theme}"
+          text: "#{action} #{theme} 📦"
         }
     }
 

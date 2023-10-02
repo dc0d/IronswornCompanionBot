@@ -37,7 +37,7 @@ defmodule ICB.Chains.AskTheOracle do
       | payload: %{
           method: "sendMessage",
           chat_id: chat.id,
-          text: "Choose the odds:",
+          text: "Choose the odds: 🔮",
           reply_markup: markup
         }
     }

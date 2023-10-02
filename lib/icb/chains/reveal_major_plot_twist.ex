@@ -22,7 +22,7 @@ defmodule ICB.Chains.RevealMajorPlotTwist do
       | payload: %{
           method: "sendMessage",
           chat_id: chat.id,
-          text: "#{answer}"
+          text: "#{answer} ✂️🧵🪡"
         }
     }
 

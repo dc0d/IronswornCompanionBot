@@ -33,6 +33,15 @@ defmodule ICB.Chains.AskTheOracleCallback do
       odds_text
       |> Odds.parse()
       |> Odds.resolve()
+
+    resolution_sign =
+      case resolution do
+        :yes -> "✅"
+        :no -> "❌"
+      end
+
+    resolution_text =
+      resolution
       |> Resolution.to_string()
 
     context = %{
@@ -46,7 +55,7 @@ defmodule ICB.Chains.AskTheOracleCallback do
     Task.start(fn ->
       Process.sleep(361)
 
-      case Telegex.send_message(chat_id, "#{resolution} 🎲 #{odds_text}") do
+      case Telegex.send_message(chat_id, "#{resolution_text} #{resolution_sign} #{odds_text}") do
         {:error, error} -> error |> inspect() |> Logger.error()
         _ -> :ok
       end
