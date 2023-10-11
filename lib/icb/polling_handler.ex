@@ -27,6 +27,11 @@ defmodule ICB.PollingHandler do
     ICB.Chains.Handler.call(update, %ICB.Chains.Context{bot: Telegex.Instance.me()})
   end
 
+  @impl true
+  def on_failure(reason) do
+    Logger.error("polling error: #{inspect(reason)}")
+  end
+
   defp set_commands do
     Task.start(fn ->
       Process.sleep(3000)
