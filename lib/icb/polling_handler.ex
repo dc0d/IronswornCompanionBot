@@ -15,7 +15,8 @@ defmodule ICB.PollingHandler do
 
     %Telegex.Polling.Config{
       timeout: 3,
-      interval: 500
+      interval: 513,
+      limit: 10
     }
   end
 
