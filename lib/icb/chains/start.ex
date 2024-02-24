@@ -5,7 +5,7 @@ defmodule ICB.Chains.Start do
   require Logger
 
   @impl true
-  def match?(%{text: @command <> _ = text, chat: %{type: "private"}} = _message, _context)
+  def match?(%{text: @command <> _ = text, chat: %{}} = _message, _context)
       when text != nil do
     true
   end
@@ -23,10 +23,9 @@ defmodule ICB.Chains.Start do
           text: """
           Let's get on with our journey! 🎲
 
-          You can see a list of command by:
+          This bot is designed to help you play Ironsworn, a free tabletop role-playing game by Shawn Tomkin. It can help you with dice rolls, generate NPCs, and answer questions using the oracles.
 
-          -   Typing '/' to bring up the command menu or
-          -   Pressing the commands menu button.
+          You can choose a command from the menu or type a command directly. Also, typing '/' brings up the command menu.
           """
         }
     }

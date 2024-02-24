@@ -12,7 +12,7 @@ defmodule ICB.Chains.NameCommand do
       require Logger
 
       @impl true
-      def match?(%{text: @command <> _ = text, chat: %{type: "private"}} = _message, _context)
+      def match?(%{text: @command <> _ = text, chat: %{}} = _message, _context)
           when text != nil do
         true
       end
@@ -42,7 +42,7 @@ defmodule ICB.Chains.NameCommand do
         {:done, context}
       end
 
-      def get_oracles(), do: ICB.Oracles
+      def get_oracles, do: ICB.Oracles
 
       defoverridable get_oracles: 0
     end

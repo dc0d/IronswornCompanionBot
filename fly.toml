@@ -3,6 +3,3 @@ primary_region = "arn"
 
 [build]
   dockerfile = "Dockerfile"
-
-[build.args]
-  ICB_TOKEN="$ICB_TOKEN"

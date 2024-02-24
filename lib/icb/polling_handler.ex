@@ -1,14 +1,27 @@
 defmodule ICB.PollingHandler do
   @moduledoc false
 
-  use Telegex.Polling.Handler
+  use Telegex.Polling.GenHandler
   require Logger
+
+  alias ICB.Chains.Handler
 
   @impl true
   def on_boot do
-    {:ok, user} = Telegex.Instance.get_me()
-    {:ok, _} = Telegex.delete_webhook()
+    fetch_me_result = Telegex.Instance.fetch_me()
+    delete_webhook_result = Telegex.delete_webhook()
 
+    Logger.info(%{
+      at: "on_boot",
+      token: System.get_env("ICB_TOKEN"),
+      bot_env: Application.get_all_env(:telegex),
+      delete_webhook_result: delete_webhook_result,
+      fetch_me_result: fetch_me_result
+    })
+
+    {:ok, _} = delete_webhook_result
+
+    {:ok, user} = fetch_me_result
     Logger.info("Bot (@#{user.username}) is working (polling)")
 
     set_commands()
@@ -24,17 +37,17 @@ defmodule ICB.PollingHandler do
   def on_update(update) do
     log_update(update)
 
-    ICB.Chains.Handler.call(update, %ICB.Chains.Context{bot: Telegex.Instance.me()})
+    Handler.call(update, %ICB.Chains.Context{bot: Telegex.Instance.bot()})
   end
 
   @impl true
-  def on_failure(reason) do
-    Logger.error("polling error: #{inspect(reason)}")
+  def on_failure(update, err) do
+    Logger.error("uncaught polling update: #{inspect(%{update: update, error: err})}")
   end
 
   defp set_commands do
     Task.start(fn ->
-      Process.sleep(3000)
+      Process.sleep(5000)
 
       commands = [
         %Telegex.Type.BotCommand{command: "start", description: "starts the bot"},

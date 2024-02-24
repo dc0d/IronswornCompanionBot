@@ -12,9 +12,9 @@ defmodule ICB.Chains.AskTheOracleCallback do
         %Telegex.Type.CallbackQuery{
           data: data,
           id: id,
-          message: %Telegex.Type.Message{
+          message: %{
             message_id: message_id,
-            chat: %Telegex.Type.Chat{id: chat_id}
+            chat: %{id: chat_id}
           }
         } =
           _callback_query,

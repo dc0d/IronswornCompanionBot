@@ -5,7 +5,7 @@ defmodule ICB.Chains.RevealChallengeRank do
   require Logger
 
   @impl true
-  def match?(%{text: @command <> _ = text, chat: %{type: "private"}} = _message, _context)
+  def match?(%{text: @command <> _ = text, chat: %{}} = _message, _context)
       when text != nil do
     true
   end

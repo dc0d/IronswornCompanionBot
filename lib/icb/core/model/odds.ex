@@ -1,7 +1,7 @@
 defmodule ICB.Core.Model.Odds do
   @moduledoc false
 
-  def list(), do: [:small_chance, :unlikely, :fifty_fifty, :likely, :almost_certain]
+  def list, do: [:small_chance, :unlikely, :fifty_fifty, :likely, :almost_certain]
 
   @spec resolve(atom(), keyword) :: :no | :yes
   def resolve(odds, opts \\ []) do

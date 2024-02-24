@@ -3,12 +3,14 @@ defmodule ICB.Chains.AskTheOracle do
 
   use Telegex.Chain, {:command, :ask_the_oracle}
   require Logger
-  alias Telegex.Type.{InlineKeyboardMarkup, InlineKeyboardButton}
-  alias ICB.Core.Model.Support
+
   alias ICB.Core.Model.Odds
+  alias ICB.Core.Model.Support
+  alias Telegex.Type.InlineKeyboardButton
+  alias Telegex.Type.InlineKeyboardMarkup
 
   @impl true
-  def match?(%{text: @command <> _ = text, chat: %{type: "private"}} = _message, _context)
+  def match?(%{text: @command <> _ = text, chat: %{}} = _message, _context)
       when text != nil do
     true
   end
@@ -17,7 +19,7 @@ defmodule ICB.Chains.AskTheOracle do
   def match?(_message, _context), do: false
 
   @impl true
-  def handle(%{chat: chat, text: "/ask_the_oracle"} = _update, context) do
+  def handle(%{chat: chat, text: "/ask_the_oracle" <> _} = _update, context) do
     markup = %InlineKeyboardMarkup{
       inline_keyboard:
         Odds.list()

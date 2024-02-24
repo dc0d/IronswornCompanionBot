@@ -20,7 +20,7 @@ defmodule ICB.Oracles do
     )
   end
 
-  def action_theme() do
+  def action_theme do
     {:ok, [action_r, theme_r]} = Dice.roll("2d100")
 
     Agent.get(__MODULE__, fn %{ironsworn_oracles_prompts: ironsworn_oracles_prompts} = _state ->
@@ -36,7 +36,7 @@ defmodule ICB.Oracles do
     end)
   end
 
-  def make_npc() do
+  def make_npc do
     {:ok, [role_r, goal_r, descriptor_r, disposition_r]} = Dice.roll("4d100")
 
     Agent.get(__MODULE__, fn %{ironsworn_oracles_character: ironsworn_oracles_character} = _state ->
@@ -116,7 +116,7 @@ defmodule ICB.Oracles do
 
   # settlement
 
-  def settlement_quick() do
+  def settlement_quick do
     {:ok, [settlement_trouble_r, prefix_r, suffix_r]} = Dice.roll("3d100")
 
     Agent.get(__MODULE__, fn %{ironsworn_oracles_settlement: ironsworn_oracles_settlement} =
