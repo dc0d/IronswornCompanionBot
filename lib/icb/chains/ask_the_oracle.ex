@@ -49,7 +49,7 @@ defmodule ICB.Chains.AskTheOracle do
 
   @impl true
   def handle(update, context) do
-    Logger.warning(inspect(%{signal: :unandled_update, update: update, context: context}))
+    Logger.warning("unhandled update", %{update: update, context: context})
     {:done, context}
   end
 end

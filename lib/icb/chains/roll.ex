@@ -35,14 +35,14 @@ defmodule ICB.Chains.Roll do
         other_dice_handler(update, context, n_text)
 
       _ ->
-        Logger.warning(inspect(%{signal: :unandled_update, update: update, context: context}))
+        Logger.warning("unhandled update", %{update: update, context: context})
         {:done, context}
     end
   end
 
   @impl true
   def handle(update, context) do
-    Logger.warning(inspect(%{signal: :unandled_update, update: update, context: context}))
+    Logger.warning("unhandled update", %{update: update, context: context})
     {:done, context}
   end
 

@@ -35,7 +35,7 @@ defmodule ICB.Chains.Start do
 
   @impl true
   def handle(update, context) do
-    Logger.warning(inspect(%{signal: :unandled_update, update: update, context: context}))
+    Logger.warning("unhandled update", %{update: update, context: context})
     {:done, %{}}
   end
 end

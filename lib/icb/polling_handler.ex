@@ -11,10 +11,15 @@ defmodule ICB.PollingHandler do
     fetch_me_result = Telegex.Instance.fetch_me()
     delete_webhook_result = Telegex.delete_webhook()
 
-    Logger.info(%{
-      at: "on_boot",
-      token: System.get_env("ICB_TOKEN"),
-      bot_env: Application.get_all_env(:telegex),
+    is_token_provided =
+      case System.get_env("ICB_TOKEN") do
+        nil -> false
+        "" -> false
+        _ -> true
+      end
+
+    Logger.info("on boot setup", %{
+      is_token_provided: is_token_provided,
       delete_webhook_result: delete_webhook_result,
       fetch_me_result: fetch_me_result
     })
@@ -42,7 +47,7 @@ defmodule ICB.PollingHandler do
 
   @impl true
   def on_failure(update, err) do
-    Logger.error("uncaught polling update: #{inspect(%{update: update, error: err})}")
+    Logger.error("uncaught polling update", %{update: update, error: err})
   end
 
   defp set_commands do
@@ -95,45 +100,15 @@ defmodule ICB.PollingHandler do
       ]
 
       case Telegex.set_my_commands(commands) do
-        {:error, error} -> error |> inspect() |> Logger.error()
+        {:error, error} -> Logger.error("set_my_commands errored", %{error: error})
         _ -> :ok
       end
     end)
   end
 
   defp log_update(update) do
-    case update do
-      %{
-        callback_query: %{
-          data: data,
-          message: %{
-            from: %{
-              first_name: first_name,
-              last_name: last_name,
-              username: username,
-              id: id
-            },
-            text: text
-          }
-        }
-      } ->
-        Logger.info("from [#{first_name}] [#{last_name}] (@#{username}) (#{id}): #{text} #{data}")
+    Logger.info("incoming update", %{update: update})
 
-      %{
-        message: %{
-          from: %{
-            first_name: first_name,
-            last_name: last_name,
-            username: username,
-            id: id
-          },
-          text: text
-        }
-      } ->
-        Logger.info("from [#{first_name}] [#{last_name}] (@#{username}) (#{id}): #{text}")
-
-      _ ->
-        :ok
-    end
+    :ok
   end
 end

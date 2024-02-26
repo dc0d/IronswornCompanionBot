@@ -13,7 +13,7 @@ defmodule ICB.Core.Model.Dice do
       {:ok, roll_number(pairs, rand: rand)}
     else
       error ->
-        Logger.error(inspect(error))
+        Logger.error("parsing the dice string errored", %{error: error})
         {:error, error}
     end
   end
@@ -35,7 +35,7 @@ defmodule ICB.Core.Model.Dice do
   end
 
   defp check_expr(dice_expr) do
-    Logger.error(inspect({:unknown_dice_expr, dice_expr}))
+    Logger.error("unknown dice expression", %{dice_expr: dice_expr})
     {:error, :unknown_dice_expr}
   end
 end

@@ -21,7 +21,7 @@ defmodule ICB.Chains.AskTheOracleCallback do
         context
       ) do
     case Telegex.delete_message(chat_id, message_id) do
-      {:error, error} -> error |> inspect() |> Logger.error()
+      {:error, error} -> Logger.error("delete_message", %{error: error})
       _ -> :ok
     end
 
@@ -56,7 +56,7 @@ defmodule ICB.Chains.AskTheOracleCallback do
       Process.sleep(361)
 
       case Telegex.send_message(chat_id, "#{resolution_text} #{resolution_sign} #{odds_text}") do
-        {:error, error} -> error |> inspect() |> Logger.error()
+        {:error, error} -> Logger.error("send_message", %{error: error})
         _ -> :ok
       end
     end)
@@ -67,11 +67,8 @@ defmodule ICB.Chains.AskTheOracleCallback do
   @impl true
   def handle(callback_query, context) do
     Logger.warning(
-      inspect(%{
-        signal: :unandled_callback_query,
-        callback_query: callback_query,
-        context: context
-      })
+      "unhandled callback_query",
+      %{callback_query: callback_query, context: context}
     )
 
     {:done, context}

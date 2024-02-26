@@ -34,7 +34,9 @@ defmodule ICB.MixProject do
       {:finch, "~> 0.18.0"},
       {:multipart, "~> 0.4.0"},
       {:nimble_parsec, "~> 1.4.0"},
-      {:jaxon, "~> 2.0.8"}
+      {:jaxon, "~> 2.0.8"},
+      {:jason, "~> 1.4"},
+      {:logger_json, "~> 5.1"}
     ]
   end
 
