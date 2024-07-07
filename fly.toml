@@ -1,5 +1,12 @@
 app = "young-dream-979"
 primary_region = "arn"
+kill_timeout = 60
 
 [build]
-  dockerfile = "Dockerfile"
+dockerfile = "Dockerfile"
+
+[build.args]
+TARGET_OS = 'linux'
+TARGET_ARCH = 'amd64'
+GF_GOMEMLIMIT = '150MiB'
+GO_VERSION = '1.22'

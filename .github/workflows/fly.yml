@@ -7,27 +7,15 @@ permissions:
 
 jobs:
   deploy:
-    name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
+    name: Deploy
     runs-on: ubuntu-latest
     concurrency: deploy-group
-    strategy:
-      matrix:
-        otp: ['26']
-        elixir: ['1.16.1']
 
     steps:
       - uses: actions/checkout@v4
 
-      - uses: erlef/setup-beam@v1
-        with:
-          otp-version: ${{matrix.otp}}
-          elixir-version: ${{matrix.elixir}}
-
-      - run: mix deps.get
-      - run: mix compile --warnings-as-errors
-      - run: mix release
-
       - uses: superfly/flyctl-actions/setup-flyctl@master
+
       - run: |
           flyctl deploy --remote-only --build-arg ICB_TOKEN=${{ secrets.ICB_TOKEN }}
         env:
