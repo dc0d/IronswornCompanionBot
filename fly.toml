@@ -1,12 +1,20 @@
-app = "young-dream-979"
-primary_region = "arn"
-kill_timeout = 60
+# fly.toml app configuration file generated for annoying-billing-plan on 2024-07-08T20:25:18+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'annoying-billing-plan'
+primary_region = 'arn'
+kill_timeout = '1m0s'
 
 [build]
-dockerfile = "Dockerfile"
+  dockerfile = 'Dockerfile'
 
-[build.args]
-TARGET_OS = 'linux'
-TARGET_ARCH = 'amd64'
-GF_GOMEMLIMIT = '150MiB'
-GO_VERSION = '1.22'
+  [build.args]
+    GF_GOMEMLIMIT = '150MiB'
+    GO_VERSION = '1.22'
+    TARGET_ARCH = 'amd64'
+    TARGET_OS = 'linux'
+
+[[vm]]
+  size = 'shared-cpu-1x'
